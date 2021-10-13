@@ -2,6 +2,8 @@
 
 See <https://docs.openshift.com/container-platform/4.7/cicd/gitops/configuring-sso-for-argo-cd-on-openshift.html>
 
+Before starting, install the Red Hat Openshift GitOps and Namespace Configuration operators from OperatorHub.
+
 ```sh
 export argocd_namespace=example-argocd
 export argocd_tenant_namespace=example-argocd-tenant
