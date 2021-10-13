@@ -10,8 +10,8 @@ export argocd_tenant_namespace=example-argocd-tenant
 
 helm upgrade -i argocd helm/argocd \
   --set subdomain=$(oc get configmap config -n openshift-apiserver -o jsonpath={.data.config\\.yaml} | jq -r .routingConfig.subdomain) \
+  --set argocd.tenant.namespace=${argocd_tenant_namespace} \
   -n ${argocd_namespace} --create-namespace
-
 ```
 
 Manually add the tenant namespace in the secret *example-default-cluster-config* 
