@@ -1,7 +1,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "argocd-tenant.name" -}}
+{{- define "namespace-configurations.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -10,7 +10,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "argocd-tenant.fullname" -}}
+{{- define "namespace-configurations.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -26,16 +26,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "argocd-tenant.chart" -}}
+{{- define "namespace-configurations.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "argocd-tenant.labels" -}}
-helm.sh/chart: {{ include "argocd-tenant.chart" . }}
-{{ include "argocd-tenant.selectorLabels" . }}
+{{- define "namespace-configurations.labels" -}}
+helm.sh/chart: {{ include "namespace-configurations.chart" . }}
+{{ include "namespace-configurations.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -45,17 +45,17 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "argocd-tenant.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "argocd-tenant.name" . }}
+{{- define "namespace-configurations.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "namespace-configurations.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "argocd-tenant.serviceAccountName" -}}
+{{- define "namespace-configurations.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "argocd-tenant.fullname" .) .Values.serviceAccount.name }}
+{{- default (include "namespace-configurations.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}

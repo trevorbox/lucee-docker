@@ -18,12 +18,15 @@ Manually add the tenant namespace in the secret *example-default-cluster-config*
 oc patch secret example-default-cluster-config -n ${argocd_namespace} -p "{\"stringData\":{\"namespaces\":\"${argocd_namespace},${argocd_tenant_namespace}\"}}"
 ```
 
-Create role and rolebindings in tenant namespace to allow ServiceAccount in argocd namespace to create objects.
+Create clusterrole and allow the namespace-configuration-operator to automatically create rolebindings in tenant namespaces when namespaces have *argocdserviceaccountname* & *argocdnamespace* annotations.
 
 ```sh
-helm upgrade -i argocd-tenant helm/argocd-tenant -n ${argocd_tenant_namespace} --create-namespace
+oc annotate namespace ${argocd_tenant_namespace} argocdserviceaccountname=${argocd_namespace}-application-controller
+oc annotate namespace ${argocd_tenant_namespace} argocdnamespace=${argocd_namespace}
+helm upgrade -i argocd-namespace-configurations helm/namespace-configurations -n namespace-configuration-operator
 ```
+
 
 Testing RBAC...
 
-Within keycloak, the clients and scopes are already configured to work with Openshift. Simply create a Group called ArgoCDAdmins and assign a User (that has already logged into Openshift) to it. Only this user will have admin access, all other users won't be able to see anything.
+Within keycloak, the clients and scopes are already configured to work with Openshift. Simply create a Group called *ArgoCDAdmins* and assign a User (that has already logged into Openshift) to it. Only this user will have admin access, all other users won't be able to see anything.
