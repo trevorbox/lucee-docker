@@ -25,6 +25,7 @@ Create clusterrole and allow the namespace-configuration-operator to automatical
 ```sh
 oc annotate namespace ${argocd_tenant_namespace} argocdserviceaccountname=${argocd_namespace}-application-controller
 oc annotate namespace ${argocd_tenant_namespace} argocdnamespace=${argocd_namespace}
+oc annotate namespace ${argocd_tenant_namespace} admins=user1,user3
 helm upgrade -i argocd-namespace-configurations helm/namespace-configurations -n namespace-configuration-operator
 ```
 
