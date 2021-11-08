@@ -8,6 +8,8 @@ Before starting, install the Red Hat Openshift GitOps and Namespace Configuratio
 export argocd_namespace=example-argocd
 export argocd_tenant_namespace=example-argocd-tenant
 
+oc new-project ${argocd_tenant_namespace} 
+
 helm upgrade -i argocd helm/argocd \
   --set subdomain=$(oc get configmap config -n openshift-apiserver -o jsonpath={.data.config\\.yaml} | jq -r .routingConfig.subdomain) \
   --set argocd.tenant.namespace=${argocd_tenant_namespace} \
