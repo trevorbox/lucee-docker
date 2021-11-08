@@ -21,4 +21,5 @@ spec:
         roleRef:
           apiGroup: rbac.authorization.k8s.io
           kind: ClusterRole
-          name: argocd-application-controller
+          # name: argocd-application-controller
+          name: argocd-workaround993-role
