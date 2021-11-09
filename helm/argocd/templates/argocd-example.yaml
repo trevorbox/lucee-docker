@@ -28,9 +28,9 @@ spec:
     route:
       enabled: false
   initialSSHKnownHosts: {}
-  sso:
-    provider: keycloak
-    verifyTLS: false
+  # sso:
+  #   provider: keycloak
+  #   verifyTLS: false
   rbac:
     defaultPolicy: 'role:'
     policy: |
