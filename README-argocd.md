@@ -22,7 +22,7 @@ helm upgrade -i argocd helm/argocd \
   --set subdomain=$(oc get configmap config -n openshift-apiserver -o jsonpath={.data.config\\.yaml} | jq -r .routingConfig.subdomain) \
   -n ${argocd_namespace} --create-namespace
 
-export client_secret=$(oc get secret keycloak-client-secret-argocd -o jsonpath={.data.CLIENT_SECRET})
+export client_secret=$(oc get secret keycloak-client-secret-argocd -n ${argocd_namespace} -o jsonpath={.data.CLIENT_SECRET})
 oc patch secret argocd-secret -n ${argocd_namespace} -p "{\"data\":{\"oidc.keycloak.clientSecret\":\"${client_secret}\"}}"
 ```
 

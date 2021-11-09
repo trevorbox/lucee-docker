@@ -53,7 +53,7 @@ spec:
     issuer: https://keycloak-{{ .Release.Namespace }}.{{ .Values.subdomain }}/auth/realms/argocd
     clientID: argocd
     clientSecret: $oidc.keycloak.clientSecret
-    requestedScopes: ["openid", "profile", "email", "groups"]
+    requestedScopes: ["openid", "email", "groups"]
   tls:
     ca: {}
   redis: {}

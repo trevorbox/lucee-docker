@@ -52,6 +52,22 @@ spec:
               "claim.name": email
               "jsonType.label": String
               "user.attribute": email
+    identityProviders:
+      - alias: openshift-v4
+        providerId: openshift-v4
+        enabled: true
+        trustEmail: false
+        storeToken: false
+        addReadTokenRoleOnCreate: false
+        linkOnly: false
+        firstBrokerLoginFlowAlias: "first broker login"
+        config:
+          baseUrl: "https://kubernetes.default.svc.cluster.local"
+          clientId: "keycloak-broker-example-argocd"
+          syncMode: "IMPORT"
+          clientSecret: "admin"
+          defaultScope: "user:full"
+          useJwksUrl: "true"
     # scopeMappings:
     #   - client: argocd
     #     clientScope: groups
