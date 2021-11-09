@@ -1,4 +1,1 @@
-argocd:
-  tenant:
-    namespace: example-argocd-tenant
 subdomain: apps.cluster-wljjd.wljjd.sandbox321.opentlc.com

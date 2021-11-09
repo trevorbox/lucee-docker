@@ -28,9 +28,9 @@ spec:
     route:
       enabled: false
   initialSSHKnownHosts: {}
-  sso:
-    provider: keycloak
-    verifyTLS: false
+  # sso:
+  #   provider: keycloak
+  #   verifyTLS: false
   rbac:
     defaultPolicy: 'role:'
     policy: |
@@ -53,7 +53,7 @@ spec:
     issuer: https://keycloak-{{ .Release.Namespace }}.{{ .Values.subdomain }}/auth/realms/argocd
     clientID: argocd
     clientSecret: $oidc.keycloak.clientSecret
-    requestedScopes: ["openid", "profile", "email", "groups"]
+    requestedScopes: ["openid", "email", "groups"]
   tls:
     ca: {}
   redis: {}

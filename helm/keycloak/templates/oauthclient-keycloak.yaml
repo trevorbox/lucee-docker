@@ -1,0 +1,8 @@
+kind: OAuthClient
+apiVersion: oauth.openshift.io/v1
+metadata:
+  name: keycloak-broker-example-argocd
+secret: admin
+redirectURIs:
+  - https://keycloak-example-argocd.apps.cluster-2b6f.2b6f.sandbox1326.opentlc.com/auth/realms/argocd/broker/openshift-v4/endpoint
+grantMethod: prompt

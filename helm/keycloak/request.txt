@@ -1,0 +1,21 @@
+{
+    "alias": "openshift-v4",
+    "internalId": "3a66d3f9-bc4b-4392-b81a-216fdb9e4bbb",
+    "providerId": "openshift-v4",
+    "enabled": true,
+    "updateProfileFirstLoginMode": "on",
+    "trustEmail": false,
+    "storeToken": false,
+    "addReadTokenRoleOnCreate": false,
+    "authenticateByDefault": false,
+    "linkOnly": false,
+    "firstBrokerLoginFlowAlias": "first broker login",
+    "config": {
+        "baseUrl": "https://kubernetes.default.svc.cluster.local",
+        "clientId": "keycloak-broker-example-argocd",
+        "syncMode": "IMPORT",
+        "clientSecret": "**********",
+        "defaultScope": "user:full",
+        "useJwksUrl": "true"
+    }
+}
