@@ -1,1 +1,3 @@
-subdomain: apps.cluster-wljjd.wljjd.sandbox321.opentlc.com
+subdomain: 
+argocd:
+  name: argocd
