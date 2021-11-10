@@ -42,10 +42,21 @@ helm upgrade -i argocd helm/argocd -n ${argocd_namespace} \
   --set subdomain=${subdomain}
 ```
 
+Wait for argocd to deploy...
+
+## Add tenant namespace to argocd 
+
+Manually add the tenant namespace in the secret *${argocd_name}-default-cluster-config* 
+
+```sh
+oc patch secret ${argocd_name}-default-cluster-config -n ${argocd_namespace} -p "{\"stringData\":{\"namespaces\":\"${argocd_namespace},${argocd_tenant_namespace}\"}}"
+```
+
 ## Configure the client secret used by argocd with keycloak
 
 ```sh
 export client_secret=$(oc get secret keycloak-client-secret-argocd -n ${argocd_namespace} -o jsonpath={.data.CLIENT_SECRET})
+
 oc patch secret argocd-secret -n ${argocd_namespace} -p "{\"data\":{\"oidc.keycloak.clientSecret\":\"${client_secret}\"}}"
 ```
 
@@ -66,14 +77,6 @@ echo Open argocd and login to create your user: https://$(oc get route ${argocd_
 Within keycloak, the clients and scopes are already configured to work with Openshift. 
 
 Create a Group called `ArgoCDAdmins` and assign a User (that has already logged into Keycloak) to it. Only users in this Group (besides the argo admin user) will have admin access to view and modify ArgoCD Applications, all other users won't be able to see anything.
-
-## Add tenant namespace to argocd 
-
-Manually add the tenant namespace in the secret *${argocd_name}-default-cluster-config* 
-
-```sh
-oc patch secret ${argocd_name}-default-cluster-config -n ${argocd_namespace} -p "{\"stringData\":{\"namespaces\":\"${argocd_namespace},${argocd_tenant_namespace}\"}}"
-```
 
 ## Configure argocd serviceaccount rolebindings in tenant namespaces using namespace-config
 
