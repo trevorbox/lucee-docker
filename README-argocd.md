@@ -6,9 +6,9 @@ See <https://docs.openshift.com/container-platform/4.7/cicd/gitops/configuring-s
 Before starting, install the Red Hat Openshift GitOps and Namespace Configuration operators from OperatorHub.
 
 ```sh
-export argocd_namespace=a-team-gitops
-export argocd_tenant_namespace=a-team-gitops-application
-export argocd_name=a-team
+export argocd_namespace=tbox-gitops
+export argocd_tenant_namespace=tbox-apps
+export argocd_name=tbox-gitops
 export subdomain=$(oc get configmap config -n openshift-apiserver -o jsonpath={.data.config\\.yaml} | jq -r .routingConfig.subdomain)
 
 oc new-project ${argocd_namespace}
@@ -33,6 +33,32 @@ helm upgrade -i keycloak helm/keycloak -n ${argocd_namespace} \
 ```
 
 Wait for keyloak to deploy...
+
+## Create keycloak group 
+
+Since there is no CRD to create the keycloak Group `ArgoCDAdmins`, we can instead create it programmatically...
+
+```sh
+export admin_password=$(oc get secret credential-keycloak -n ${argocd_namespace} -o jsonpath='{.data.ADMIN_PASSWORD}' | base64 -d)
+export keycloak_podip=$(oc get pod keycloak-0 -n ${argocd_namespace} -o jsonpath={.status.podIP})
+oc exec -n ${argocd_namespace} keycloak-0 -- /opt/eap/bin/kcadm.sh config credentials --server http://${keycloak_podip}:8080/auth --realm master --user admin --password ${admin_password} --config /tmp/kcadm.config
+oc exec -i -n ${argocd_namespace} keycloak-0 -- /opt/eap/bin/kcadm.sh create groups -r argocd -s name="ArgoCDAdmins" -i --config /tmp/kcadm.config
+```
+
+## Deploy keycloak users
+
+Programmatically grab the uids of users. Usually users need to have logged into the cluster prior to there being a User object created in OCP.
+
+```sh
+export user1_uid=$(oc get user user1 -o jsonpath={.metadata.uid})
+export user2_uid=$(oc get user user2 -o jsonpath={.metadata.uid})
+export user3_uid=$(oc get user user3 -o jsonpath={.metadata.uid})
+export user4_uid=$(oc get user user4 -o jsonpath={.metadata.uid})
+
+envsubst < helm/keycloak-users/values-envsubst.yaml > helm/keycloak-users/values-out.yaml
+
+helm upgrade -i keycloak-users helm/keycloak-users -n ${argocd_namespace} -f helm/keycloak-users/values-out.yaml
+```
 
 ## Deploy argocd
 
