@@ -1,16 +1,3 @@
-apiVersion: keycloak.org/v1alpha1
-kind: Keycloak
-metadata:
-  name: keycloak
-  labels:
-    app: keycloak
-spec:
-  instances: 1
-  extensions:
-    - >-
-      https://github.com/aerogear/keycloak-metrics-spi/releases/download/1.0.4/keycloak-metrics-spi-1.0.4.jar
-  externalAccess:
-    enabled: false
 ---
 apiVersion: keycloak.org/v1alpha1
 kind: KeycloakRealm
@@ -74,45 +61,3 @@ spec:
   instanceSelector:
     matchLabels:
       app: keycloak
----
-apiVersion: keycloak.org/v1alpha1
-kind: KeycloakClient
-metadata:
-  name: argocd
-  labels:
-    app: keycloak
-spec:
-  realmSelector:
-    matchLabels:
-      app: keycloak
-  client:    
-    id: argocd
-    clientId: argocd
-    name: argocd
-    enabled: true
-    clientAuthenticatorType: client-secret
-    redirectUris:  
-      - https://{{ .Values.argocd.name }}-server-{{ .Values.argocd.namespace }}.{{ .Values.subdomain }}/auth/callback
-    rootUrl: https://{{ .Values.argocd.name }}-server-{{ .Values.argocd.namespace }}.{{ .Values.subdomain }}
-    adminUrl: https://{{ .Values.argocd.name }}-server-{{ .Values.argocd.namespace }}.{{ .Values.subdomain }}
-    webOrigins:
-      - https://{{ .Values.argocd.name }}-server-{{ .Values.argocd.namespace }}.{{ .Values.subdomain }}
-    notBefore: 0
-    surrogateAuthRequired: false
-    standardFlowEnabled: true
-    implicitFlowEnabled: false
-    directAccessGrantsEnabled: false
-    serviceAccountsEnabled: false
-    publicClient: false
-    frontchannelLogout: false
-    protocol: openid-connect
-    fullScopeAllowed: true
-    nodeReRegistrationTimeout: -1
-    access:
-      view: true
-      configure: true
-      manage: true
-    defaultClientScopes:
-      - groups
-      - email
-    bearerOnly: false
